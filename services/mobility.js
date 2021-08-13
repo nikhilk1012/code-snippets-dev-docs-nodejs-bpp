@@ -1,5 +1,5 @@
 const test = require("../test/search.json");
-
+const _ = require("lodash");
 const findMobiltyProviders = (startLoc, endLoc) => {
   return {
     providers: [
@@ -139,18 +139,131 @@ const findMobiltyProviders = (startLoc, endLoc) => {
 
 const findMobilityDescription = () => {
   return {
-    "description": {
-      "name": "Mock BPP"
-    }
-  }
+    description: {
+      name: "Mock BPP",
+    },
+  };
 };
 
 const returnQuoteOnSelectedItems = (items) => {
-  return  {}
+  return {};
 };
 
+const saveOrder = () => {
+  // Saved
+  return {
+    order: {
+      items: [
+        {
+          id: "sedan_spot",
+          quantity: {
+            count: 1,
+          },
+        },
+      ],
+      billing: {
+        name: "John Doe",
+        address: {
+          door: "21A",
+          name: "ABC Appartments",
+          locality: "HSR Layout",
+          city: "Bengaluru",
+          state: "Karnataka",
+          country: "India",
+          area_code: "560102",
+        },
+        email: "user@example.com",
+        phone: "+919876543210",
+      },
+      fulfillment: {
+        tracking: true,
+        start: {
+          location: {
+            id: "user-location",
+            descriptor: {
+              name: "Current user location",
+            },
+            gps: "12.9349377,77.6055586",
+          },
+          instructions: {
+            name: "pick up instructions",
+            short_desc: "Ask doorman to ring 21A",
+          },
+          time: {
+            label: "ETA",
+            duration: "P12M",
+          },
+          contact: {
+            phone: "+919999999999",
+            email: "test@example.com",
+          },
+        },
+        end: {
+          location: {
+            gps: "12.914028, 77.638698",
+          },
+        },
+      },
+    },
+  };
+};
+
+const getQuote = () => {
+  return {
+    price: {
+      currency: "INR",
+      value: "180",
+    },
+    breakup: [
+      {
+        title: "Sedan Spot Booking",
+        price: {
+          currency: "INR",
+          value: "170",
+        },
+      },
+      {
+        title: "Service Charge",
+        price: {
+          currency: "INR",
+          value: "10",
+        },
+      },
+    ],
+  };
+};
+
+const getPaymentDetails = () => {
+  return {
+    payment: {
+      uri: "https://api.bpp.com/pay?amt=$180&mode=upi&vpa=bpp@upi",
+      tl_method: "http/get",
+      params: {
+        amount: "180",
+        mode: "upi",
+        vpa: "bpp@upi",
+      },
+      type: "ON-FULFILMENT",
+      status: "NOT-PAID",
+    },
+  };
+};
+const validateOrder = (order) => {
+  if (
+    _.keys(order).includes("fulfillment") &&
+    _.keys(order).includes("items") &&
+    _.keys(order).includes("billing")
+  ) {
+    return true;
+  }
+  return false;
+};
 module.exports = {
   findMobilityDescription,
   findMobiltyProviders,
   returnQuoteOnSelectedItems,
+  getPaymentDetails,
+  getQuote,
+  saveOrder,
+  validateOrder,
 };

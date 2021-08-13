@@ -4,7 +4,7 @@ const { mobility } = require('../controllers/index');
 
 router.post('/search', mobility.search);
 router.post('/select', mobility.select);
-router.post('/init');
+router.post('/init', mobility.init);
 router.post('/confirm');
 router.post('/status');
 router.post('/track');
