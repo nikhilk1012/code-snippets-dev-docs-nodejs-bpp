@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const bpp = require("../services/bpp");
+const mobility = require("../services/mobility");
 const util = require("../config/util");
 
 /**
@@ -8,7 +8,7 @@ const util = require("../config/util");
  * @param {object} res Api response object.
  * @return {object} The search result executed by Mobilty Bpp.
  */
-const searchMobilty = async ({ headers, body }, res) => {
+const search = async ({ headers, body }, res) => {
   try {
     const intent = _.get(body, "message.intent");
     const context = _.get(body, "context");
@@ -30,7 +30,7 @@ const searchMobilty = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Searching BPP Internal Resources
-    const catalog = await bpp.findMobiltyResourcesfromCatalog(startLoc, endLoc);
+    const catalog = await mobility.findMobiltyResourcesfromCatalog(startLoc, endLoc);
     let message = {
       catalog,
     };
@@ -46,7 +46,7 @@ const searchMobilty = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} The search result executed by Mobilty Bpp.
  */
-const selectMobilty = ({ headers, body }, res) => {
+const select = ({ headers, body }, res) => {
   try {
     const order = _.get(body, "message.order");
     const context = _.get(body, "context");
@@ -61,7 +61,7 @@ const selectMobilty = ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const order = bpp.returnQuoteOnSelectedItems(items);
+    const order = mobility.returnQuoteOnSelectedItems(items);
     let message = {
       order,
     };
@@ -71,6 +71,6 @@ const selectMobilty = ({ headers, body }, res) => {
   }
 };
 module.exports = {
-  searchMobilty,
-  selectMobilty,
+  search,
+  select,
 };
