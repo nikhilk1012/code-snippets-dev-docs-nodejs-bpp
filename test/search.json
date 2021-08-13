@@ -1,881 +1,157 @@
 {
-  "categories": [
-    {
-      "id": "string",
-      "parent_category_id": "string",
-      "descriptor": {
-        "name": "string",
-        "code": "string",
-        "symbol": "string",
-        "short_desc": "string",
-        "long_desc": "string",
-        "images": ["string"],
-        "audio": "string",
-        "3d_render": "string"
-      },
-      "time": {
-        "label": "string",
-        "timestamp": "2021-08-11T18:54:44.984Z",
-        "duration": "string",
-        "range": {
-          "start": "2021-08-11T18:54:44.984Z",
-          "end": "2021-08-11T18:54:44.984Z"
+  "mobilitySearchResponse": {
+    "context": {
+      "domain": "mobility",
+      "country": "IND",
+      "city": "std:080",
+      "action": "on_search",
+      "core_version": "0.9.1",
+      "bap_id": "https://mock_bap.com/",
+      "bap_uri": "https://mock_bap.com/beckn/",
+      "bpp_id": "https://mock_bpp.com/",
+      "bpp_uri": "https://mock_bpp.com/beckn/",
+      "transaction_id": "1209849124",
+      "message_id": "12341242343",
+      "timestamp": "2021-03-23T10:00:40.065Z"
+    },
+    "message": {
+      "catalog": {
+        "bpp/descriptor": {
+          "name": "Mock BPP"
         },
-        "days": "string"
-      },
-      "tags": {
-        "additionalProp1": "string",
-        "additionalProp2": "string",
-        "additionalProp3": "string"
-      }
-    }
-  ],
-  "fulfillment": [
-    {
-      "id": "string",
-      "type": "string",
-      "provider_id": "string",
-      "state": {
-        "descriptor": {
-          "name": "string",
-          "code": "string",
-          "symbol": "string",
-          "short_desc": "string",
-          "long_desc": "string",
-          "images": ["string"],
-          "audio": "string",
-          "3d_render": "string"
-        },
-        "updated_at": "2021-08-11T18:54:44.984Z",
-        "updated_by": "string"
-      },
-      "tracking": false,
-      "customer": {
-        "person": {
-          "name": "string",
-          "image": "string",
-          "dob": "2021-08-11",
-          "gender": "string",
-          "cred": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        },
-        "contact": {
-          "phone": "string",
-          "email": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      },
-      "agent": {
-        "name": "string",
-        "image": "string",
-        "dob": "2021-08-11",
-        "gender": "string",
-        "cred": "string",
-        "tags": {
-          "additionalProp1": "string",
-          "additionalProp2": "string",
-          "additionalProp3": "string"
-        },
-        "phone": "string",
-        "email": "string"
-      },
-      "vehicle": {
-        "category": "string",
-        "capacity": 0,
-        "make": "string",
-        "model": "string",
-        "size": "string",
-        "variant": "string",
-        "color": "string",
-        "energy_type": "string",
-        "registration": "string"
-      },
-      "start": {
-        "location": {
-          "id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "gps": "string",
-          "address": {
-            "door": "string",
-            "name": "string",
-            "building": "string",
-            "street": "string",
-            "locality": "string",
-            "ward": "string",
-            "city": "string",
-            "state": "string",
-            "country": "string",
-            "area_code": "string"
-          },
-          "station_code": "string",
-          "city": {
-            "name": "string",
-            "code": "string"
-          },
-          "country": {
-            "name": "string",
-            "code": "string"
-          },
-          "circle": {
-            "gps": "string",
-            "radius": {
-              "type": "CONSTANT",
-              "value": 0,
-              "estimated_value": 0,
-              "computed_value": 0,
-              "range": {
-                "min": 0,
-                "max": 0
-              },
-              "unit": "string"
-            }
-          },
-          "polygon": "string",
-          "3dspace": "string",
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          }
-        },
-        "time": {
-          "label": "string",
-          "timestamp": "2021-08-11T18:54:44.984Z",
-          "duration": "string",
-          "range": {
-            "start": "2021-08-11T18:54:44.984Z",
-            "end": "2021-08-11T18:54:44.984Z"
-          },
-          "days": "string"
-        },
-        "instructions": {
-          "name": "string",
-          "code": "string",
-          "symbol": "string",
-          "short_desc": "string",
-          "long_desc": "string",
-          "images": ["string"],
-          "audio": "string",
-          "3d_render": "string"
-        },
-        "contact": {
-          "phone": "string",
-          "email": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        },
-        "person": {
-          "name": "string",
-          "image": "string",
-          "dob": "2021-08-11",
-          "gender": "string",
-          "cred": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      },
-      "end": {
-        "location": {
-          "id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "gps": "string",
-          "address": {
-            "door": "string",
-            "name": "string",
-            "building": "string",
-            "street": "string",
-            "locality": "string",
-            "ward": "string",
-            "city": "string",
-            "state": "string",
-            "country": "string",
-            "area_code": "string"
-          },
-          "station_code": "string",
-          "city": {
-            "name": "string",
-            "code": "string"
-          },
-          "country": {
-            "name": "string",
-            "code": "string"
-          },
-          "circle": {
-            "gps": "string",
-            "radius": {
-              "type": "CONSTANT",
-              "value": 0,
-              "estimated_value": 0,
-              "computed_value": 0,
-              "range": {
-                "min": 0,
-                "max": 0
-              },
-              "unit": "string"
-            }
-          },
-          "polygon": "string",
-          "3dspace": "string",
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          }
-        },
-        "time": {
-          "label": "string",
-          "timestamp": "2021-08-11T18:54:44.984Z",
-          "duration": "string",
-          "range": {
-            "start": "2021-08-11T18:54:44.984Z",
-            "end": "2021-08-11T18:54:44.984Z"
-          },
-          "days": "string"
-        },
-        "instructions": {
-          "name": "string",
-          "code": "string",
-          "symbol": "string",
-          "short_desc": "string",
-          "long_desc": "string",
-          "images": ["string"],
-          "audio": "string",
-          "3d_render": "string"
-        },
-        "contact": {
-          "phone": "string",
-          "email": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        },
-        "person": {
-          "name": "string",
-          "image": "string",
-          "dob": "2021-08-11",
-          "gender": "string",
-          "cred": "string",
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      },
-      "tags": {
-        "additionalProp1": "string",
-        "additionalProp2": "string",
-        "additionalProp3": "string"
-      }
-    }
-  ],
-  "payments": [
-    {
-      "uri": "string",
-      "tl_method": "http/get",
-      "params": {
-        "transaction_id": "string",
-        "transaction_status": "string",
-        "amount": "string",
-        "currency": "string",
-        "additionalProp1": "string",
-        "additionalProp2": "string",
-        "additionalProp3": "string"
-      },
-      "type": "ON-ORDER",
-      "status": "PAID",
-      "time": {
-        "label": "string",
-        "timestamp": "2021-08-11T18:54:44.984Z",
-        "duration": "string",
-        "range": {
-          "start": "2021-08-11T18:54:44.984Z",
-          "end": "2021-08-11T18:54:44.984Z"
-        },
-        "days": "string"
-      }
-    }
-  ],
-  "offers": [
-    {
-      "id": "string",
-      "descriptor": {
-        "name": "string",
-        "code": "string",
-        "symbol": "string",
-        "short_desc": "string",
-        "long_desc": "string",
-        "images": ["string"],
-        "audio": "string",
-        "3d_render": "string"
-      },
-      "location_ids": ["string"],
-      "category_ids": ["string"],
-      "item_ids": ["string"],
-      "time": {
-        "label": "string",
-        "timestamp": "2021-08-11T18:54:44.984Z",
-        "duration": "string",
-        "range": {
-          "start": "2021-08-11T18:54:44.984Z",
-          "end": "2021-08-11T18:54:44.984Z"
-        },
-        "days": "string"
-      }
-    }
-  ],
-  "providers": [
-    {
-      "id": "string",
-      "descriptor": {
-        "name": "string",
-        "code": "string",
-        "symbol": "string",
-        "short_desc": "string",
-        "long_desc": "string",
-        "images": ["string"],
-        "audio": "string",
-        "3d_render": "string"
-      },
-      "category_id": "string",
-      "time": {
-        "label": "string",
-        "timestamp": "2021-08-11T18:54:44.984Z",
-        "duration": "string",
-        "range": {
-          "start": "2021-08-11T18:54:44.984Z",
-          "end": "2021-08-11T18:54:44.984Z"
-        },
-        "days": "string"
-      },
-      "categories": [
-        {
-          "id": "string",
-          "parent_category_id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          },
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      ],
-      "fulfillments": [
-        {
-          "id": "string",
-          "type": "string",
-          "provider_id": "string",
-          "state": {
+        "bpp/providers": [
+          {
+            "id": "yellow-cabs",
             "descriptor": {
-              "name": "string",
-              "code": "string",
-              "symbol": "string",
-              "short_desc": "string",
-              "long_desc": "string",
-              "images": ["string"],
-              "audio": "string",
-              "3d_render": "string"
+              "name": "Yellow Cabs"
             },
-            "updated_at": "2021-08-11T18:54:44.984Z",
-            "updated_by": "string"
-          },
-          "tracking": false,
-          "customer": {
-            "person": {
-              "name": "string",
-              "image": "string",
-              "dob": "2021-08-11",
-              "gender": "string",
-              "cred": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
+            "locations": [
+              {
+                "id": "closest-suv-spot",
+                "gps": "12.9349377,77.6055586"
+              },
+              {
+                "id": "closest-sedan-spot",
+                "gps": "12.9349377,77.6055586"
+              },
+              {
+                "id": "closest-sedan-outstation",
+                "gps": "12.9349377,77.6055586"
               }
-            },
-            "contact": {
-              "phone": "string",
-              "email": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
-              }
-            }
-          },
-          "agent": {
-            "name": "string",
-            "image": "string",
-            "dob": "2021-08-11",
-            "gender": "string",
-            "cred": "string",
-            "tags": {
-              "additionalProp1": "string",
-              "additionalProp2": "string",
-              "additionalProp3": "string"
-            },
-            "phone": "string",
-            "email": "string"
-          },
-          "vehicle": {
-            "category": "string",
-            "capacity": 0,
-            "make": "string",
-            "model": "string",
-            "size": "string",
-            "variant": "string",
-            "color": "string",
-            "energy_type": "string",
-            "registration": "string"
-          },
-          "start": {
-            "location": {
-              "id": "string",
-              "descriptor": {
-                "name": "string",
-                "code": "string",
-                "symbol": "string",
-                "short_desc": "string",
-                "long_desc": "string",
-                "images": ["string"],
-                "audio": "string",
-                "3d_render": "string"
-              },
-              "gps": "string",
-              "address": {
-                "door": "string",
-                "name": "string",
-                "building": "string",
-                "street": "string",
-                "locality": "string",
-                "ward": "string",
-                "city": "string",
-                "state": "string",
-                "country": "string",
-                "area_code": "string"
-              },
-              "station_code": "string",
-              "city": {
-                "name": "string",
-                "code": "string"
-              },
-              "country": {
-                "name": "string",
-                "code": "string"
-              },
-              "circle": {
-                "gps": "string",
-                "radius": {
-                  "type": "CONSTANT",
-                  "value": 0,
-                  "estimated_value": 0,
-                  "computed_value": 0,
-                  "range": {
-                    "min": 0,
-                    "max": 0
-                  },
-                  "unit": "string"
+            ],
+            "categories": [
+              {
+                "id": "spot_booking",
+                "descriptor": {
+                  "name": "Spot booking"
                 }
               },
-              "polygon": "string",
-              "3dspace": "string",
-              "time": {
-                "label": "string",
-                "timestamp": "2021-08-11T18:54:44.984Z",
-                "duration": "string",
-                "range": {
-                  "start": "2021-08-11T18:54:44.984Z",
-                  "end": "2021-08-11T18:54:44.984Z"
-                },
-                "days": "string"
-              }
-            },
-            "time": {
-              "label": "string",
-              "timestamp": "2021-08-11T18:54:44.984Z",
-              "duration": "string",
-              "range": {
-                "start": "2021-08-11T18:54:44.984Z",
-                "end": "2021-08-11T18:54:44.984Z"
-              },
-              "days": "string"
-            },
-            "instructions": {
-              "name": "string",
-              "code": "string",
-              "symbol": "string",
-              "short_desc": "string",
-              "long_desc": "string",
-              "images": ["string"],
-              "audio": "string",
-              "3d_render": "string"
-            },
-            "contact": {
-              "phone": "string",
-              "email": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
-              }
-            },
-            "person": {
-              "name": "string",
-              "image": "string",
-              "dob": "2021-08-11",
-              "gender": "string",
-              "cred": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
-              }
-            }
-          },
-          "end": {
-            "location": {
-              "id": "string",
-              "descriptor": {
-                "name": "string",
-                "code": "string",
-                "symbol": "string",
-                "short_desc": "string",
-                "long_desc": "string",
-                "images": ["string"],
-                "audio": "string",
-                "3d_render": "string"
-              },
-              "gps": "string",
-              "address": {
-                "door": "string",
-                "name": "string",
-                "building": "string",
-                "street": "string",
-                "locality": "string",
-                "ward": "string",
-                "city": "string",
-                "state": "string",
-                "country": "string",
-                "area_code": "string"
-              },
-              "station_code": "string",
-              "city": {
-                "name": "string",
-                "code": "string"
-              },
-              "country": {
-                "name": "string",
-                "code": "string"
-              },
-              "circle": {
-                "gps": "string",
-                "radius": {
-                  "type": "CONSTANT",
-                  "value": 0,
-                  "estimated_value": 0,
-                  "computed_value": 0,
-                  "range": {
-                    "min": 0,
-                    "max": 0
-                  },
-                  "unit": "string"
+              {
+                "id": "outstation",
+                "descriptor": {
+                  "name": "Outstation"
                 }
-              },
-              "polygon": "string",
-              "3dspace": "string",
-              "time": {
-                "label": "string",
-                "timestamp": "2021-08-11T18:54:44.984Z",
-                "duration": "string",
-                "range": {
-                  "start": "2021-08-11T18:54:44.984Z",
-                  "end": "2021-08-11T18:54:44.984Z"
+              }
+            ],
+            "items": [
+              {
+                "id": "sedan_spot",
+                "descriptor": {
+                  "name": "4 seater Sedan",
+                  "images": ["https://mock_bpp.com/images/sedan.jpg"]
                 },
-                "days": "string"
-              }
-            },
-            "time": {
-              "label": "string",
-              "timestamp": "2021-08-11T18:54:44.984Z",
-              "duration": "string",
-              "range": {
-                "start": "2021-08-11T18:54:44.984Z",
-                "end": "2021-08-11T18:54:44.984Z"
+                "category_id": "spot_booking",
+                "location_id": "closest-sedan-spot",
+                "price": {
+                  "currency": "INR",
+                  "value": "170"
+                },
+                "time": {
+                  "label": "ETA",
+                  "duration": "P14M"
+                },
+                "matched": true
               },
-              "days": "string"
-            },
-            "instructions": {
-              "name": "string",
-              "code": "string",
-              "symbol": "string",
-              "short_desc": "string",
-              "long_desc": "string",
-              "images": ["string"],
-              "audio": "string",
-              "3d_render": "string"
-            },
-            "contact": {
-              "phone": "string",
-              "email": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
-              }
-            },
-            "person": {
-              "name": "string",
-              "image": "string",
-              "dob": "2021-08-11",
-              "gender": "string",
-              "cred": "string",
-              "tags": {
-                "additionalProp1": "string",
-                "additionalProp2": "string",
-                "additionalProp3": "string"
-              }
-            }
-          },
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      ],
-      "payments": [
-        {
-          "uri": "string",
-          "tl_method": "http/get",
-          "params": {
-            "transaction_id": "string",
-            "transaction_status": "string",
-            "amount": "string",
-            "currency": "string",
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          },
-          "type": "ON-ORDER",
-          "status": "PAID",
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          }
-        }
-      ],
-      "locations": [
-        {
-          "id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "gps": "string",
-          "address": {
-            "door": "string",
-            "name": "string",
-            "building": "string",
-            "street": "string",
-            "locality": "string",
-            "ward": "string",
-            "city": "string",
-            "state": "string",
-            "country": "string",
-            "area_code": "string"
-          },
-          "station_code": "string",
-          "city": {
-            "name": "string",
-            "code": "string"
-          },
-          "country": {
-            "name": "string",
-            "code": "string"
-          },
-          "circle": {
-            "gps": "string",
-            "radius": {
-              "type": "CONSTANT",
-              "value": 0,
-              "estimated_value": 0,
-              "computed_value": 0,
-              "range": {
-                "min": 0,
-                "max": 0
+              {
+                "id": "suv_spot",
+                "descriptor": {
+                  "name": "6 seater SUV ",
+                  "images": ["https://mock_bpp.com/images/suv.jpg"]
+                },
+                "category_id": "spot_booking",
+                "location_id": "closest-suv-spot",
+                "price": {
+                  "currency": "INR",
+                  "value": "290"
+                },
+                "time": {
+                  "label": "ETA",
+                  "duration": "P12M"
+                },
+                "matched": true
               },
-              "unit": "string"
-            }
+              {
+                "id": "sedan_outstation",
+                "descriptor": {
+                  "name": "4 Seater Sedan",
+                  "images": ["https://mock_bpp.com/images/sedan-out.jpg"]
+                },
+                "category_id": "outstation",
+                "location_id": "closest-sedan-outstation",
+                "price": {
+                  "currency": "INR",
+                  "value": "570"
+                },
+                "time": {
+                  "label": "ETA",
+                  "duration": "P17M"
+                },
+                "matched": true
+              }
+            ]
           },
-          "polygon": "string",
-          "3dspace": "string",
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
+          {
+            "id": "cabs-4-all",
+            "descriptor": {
+              "name": "Cabs 4 All"
             },
-            "days": "string"
+            "locations": [
+              {
+                "id": "closest-sedan",
+                "gps": "12.9349377,77.6055586"
+              }
+            ],
+            "categories": [
+              {
+                "id": "rental",
+                "descriptor": {
+                  "name": "Rental"
+                }
+              }
+            ],
+            "items": [
+              {
+                "id": "sedan_rental",
+                "descriptor": {
+                  "name": "Sedan 5 hours",
+                  "images": ["https://mock_bpp.com/images/sedan_rental.jpg"]
+                },
+                "category_id": "rental",
+                "location_id": "closest-sedan",
+                "price": {
+                  "currency": "INR",
+                  "value": "200"
+                },
+                "time": {
+                  "label": "ETA",
+                  "duration": "P12M"
+                },
+                "matched": true
+              }
+            ]
           }
-        }
-      ],
-      "offers": [
-        {
-          "id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "location_ids": ["string"],
-          "category_ids": ["string"],
-          "item_ids": ["string"],
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          }
-        }
-      ],
-      "items": [
-        {
-          "id": "string",
-          "parent_item_id": "string",
-          "descriptor": {
-            "name": "string",
-            "code": "string",
-            "symbol": "string",
-            "short_desc": "string",
-            "long_desc": "string",
-            "images": ["string"],
-            "audio": "string",
-            "3d_render": "string"
-          },
-          "price": {
-            "currency": "string",
-            "value": "string",
-            "estimated_value": "string",
-            "computed_value": "string",
-            "listed_value": "string",
-            "offered_value": "string",
-            "minimum_value": "string",
-            "maximum_value": "string"
-          },
-          "category_id": "string",
-          "location_id": "string",
-          "time": {
-            "label": "string",
-            "timestamp": "2021-08-11T18:54:44.984Z",
-            "duration": "string",
-            "range": {
-              "start": "2021-08-11T18:54:44.984Z",
-              "end": "2021-08-11T18:54:44.984Z"
-            },
-            "days": "string"
-          },
-          "matched": true,
-          "related": true,
-          "recommended": true,
-          "tags": {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          }
-        }
-      ],
-      "exp": "2021-08-11T18:54:44.984Z",
-      "tags": {
-        "additionalProp1": "string",
-        "additionalProp2": "string",
-        "additionalProp3": "string"
+        ]
       }
     }
-  ]
+  }
 }
