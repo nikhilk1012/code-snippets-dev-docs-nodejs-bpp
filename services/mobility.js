@@ -1,7 +1,11 @@
 const test = require('../test/search.json')
 
-const findMobiltyResourcesfromGeoLoc = (startLoc, endLoc) => {
-  return test.mobilitySearchResponse;
+const findMobiltyProviders = (startLoc, endLoc) => {
+  return test.mobility.providers;
+}
+
+const findMobilityDescription = () => {
+  return test.mobility.descriptors
 }
 
 const returnQuoteOnSelectedItems = (items) => {
@@ -9,6 +13,7 @@ const returnQuoteOnSelectedItems = (items) => {
 }
 
 module.exports = {
-  findMobiltyResourcesfromGeoLoc,
+  findMobilityDescription,
+  findMobiltyProviders,
   returnQuoteOnSelectedItems
 }

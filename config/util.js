@@ -19,38 +19,36 @@ const httpResponse = (status, error) => {
   }
   return res;
 };
-const lookupBAP = (headers) => {
-  let bppURI = "https://mock_bpp.com/beckn/";
-  let bppId = "https://mock_bpp.com/";
-  return { bppId, bppURI };
-};
 
 const bgURL = () => {
   return "https://mock.bg.com/beckn/";
 };
 
-const respondToBAP = (context, headers, message, pathURI) => {
-  // ... Using Headers
-  const { bppId, bppURI } = await lookupBAP(headers);
-  // ... Constructing Request for BAP
-  const bapURI = _.get(context, "bap_uri");
+const lookup = (headers, context) => {
+  let uri = _.get(context, "bap_uri")
+  if (headers["Proxy-Authorization"]) {
+    uri = bgURL(headers);
+  }
+  return { uri };
+};
+
+const addSignature = (headers) => {
+  // TO-DO Add Signature
+}
+
+const respond = (headers, context, message, pathURI) => {
+  const { uri } = await lookup(headers);
   const response = {
-    context: {
-      ...context,
-      bpp_id: bppId,
-      bpp_uri: bppURI,
-    },
+    context,
     message,
   };
-  let callingURL = bapURI;
-  if (headers["Proxy-Authorization"]) {
-    callingURL = bgURL(headers);
-  }
-  await axios({ URL: `${callingURL}/${pathURI}`, method: "POST", data: response });
+  addSignature(headers);
+  await axios({ URL: `${uri}/${pathURI}`, method: "POST", data: response });
 };
+
 module.exports = {
   bgURL,
   httpResponse,
-  lookupBAP,
-  respondToBAP
+  lookup,
+  respond
 };

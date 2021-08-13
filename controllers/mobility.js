@@ -20,22 +20,21 @@ const search = async ({ headers, body }, res) => {
     if (!startLoc || !endLoc) {
       return res
         .status(400)
-        .send(
-          util.httpResponse(
-            "NACK",
-            `Invalid Locations. Please check the request again`
-          )
-        );
+        .send(util.httpResponse("NACK", `Invalid Locations`));
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Searching BPP Internal Resources
-    const catalog = await mobility.findMobiltyResourcesfromCatalog(startLoc, endLoc);
+    const providers = await mobility.findMobiltyProviders(startLoc, endLoc);
+    // ... Getting BPP Description
+    const description = await mobility.findMobilityDescription();
     let message = {
-      catalog,
+      catalog: {
+        "bpp/providers": providers,
+        "bpp/descriptor": description,
+      },
     };
-    let pathURI = '/on_search';
-    await util.respondToBAP(headers, context, message, pathURI);
+    await util.respond(headers, context, message, "/on_search");
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }
@@ -54,7 +53,7 @@ const select = ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const items = _.get(order, "items");
+    const itemIds = _.get(order, "items").map((item) => item.id);
     if (!items.length) {
       return res
         .status(400)
@@ -62,12 +61,11 @@ const select = ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const order = mobility.returnQuoteOnSelectedItems(items);
-    let message = {
-      order,
-    };
-    let pathURI = '/on_select';
-    await util.respondToBAP(headers, context, message, pathURI);
+    let message = { order: {} };
+    const { quote, provider, items } =
+      mobility.returnQuoteOnSelectedItems(itemIds);
+    message.order = { provider, items, quote };
+    await util.respondToBAP(headers, context, message, "/on_select");
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }

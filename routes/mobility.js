@@ -3,7 +3,7 @@ const router = express.Router();
 const { mobility } = require('../controllers/index');
 
 router.post('/search', mobility.search);
-router.post('/select');
+router.post('/select', mobility.select);
 router.post('/init');
 router.post('/confirm');
 router.post('/status');
