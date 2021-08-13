@@ -72,10 +72,10 @@ const select = async ({ headers, body }, res) => {
 };
 
 /**
- * Returns Quote using request message.
+ * Adds the Order Details to BPP.
  * @param {object} req Api request object.
  * @param {object} res Api response object.
- * @return {object} returns the quotes provided by mobility
+ * @return {object} returns the order details on each update
  */
 const init = async ({ headers, body }, res) => {
   try {
@@ -87,6 +87,7 @@ const init = async ({ headers, body }, res) => {
     const transactionId = _.get(context, "transactionId");
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
+    // ... Confirm the transactionId is associated with the Order
     await mobility.saveOrder(transactionId, order);
     const isvalidated = mobility.validateOrder(order);
     if (isvalidated) {
@@ -102,8 +103,206 @@ const init = async ({ headers, body }, res) => {
   }
 };
 
+/**
+ * Confirms the Order By BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order
+ */
+ const confirm = async ({ headers, body }, res) => {
+  try {
+    const order = _.get(body, "message.order");
+    const paymentTransactionId = _.get(body, "paymentTransactionId");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const transactionId = _.get(context, "transactionId");
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    await mobility.getOrder(transactionId, order);
+    const isvalidated = mobility.validateOrder(order, paymentTransactionId);
+    if (isvalidated) {
+      const message = {
+        order
+      }
+      await util.respond(headers, context, message, "/on_confirm");
+    } else {
+      res.status(500).send(util.httpResponse("NACK", "Invalid Order"));
+    }
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+};
+
+/**
+ * Gets the Order Status from BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+const status = async ({ headers, body }, res) => {
+  try {
+    const orderId = _.get(body, "message.order_id");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const transactionId = _.get(context, "transactionId");
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    const order = await mobility.getOrderById(transactionId, orderId);
+    const message = {
+      order
+    }
+    if (message.order) {
+      await util.respond(headers, context, message, "/on_confirm");
+    } else {
+      res.status(500).send(util.httpResponse("NACK", "Invalid Order"));
+    }
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
+
+/**
+ * Cancels the Order Status by BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+ const cancel = async ({ headers, body }, res) => {
+  try {
+    const orderId = _.get(body, "message.order_id");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    const cancelledOrder = await mobility.cancelOrder(orderId);
+    let message = {
+      order: cancelledOrder
+    }
+    await util.respond(headers, context, message, "/on_cancel");
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
+/**
+ * Updates the Order by BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+ const update = async ({ headers, body }, res) => {
+  try {
+    const order = _.get(body, "message.order");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const transactionId = _.get(context, "transactionId");
+    const updatedOrder = await mobility.saveOrder(transactionId, order)
+    let message = {
+      order: updatedOrder
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    await util.respond(headers, context, message, "/on_update");
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
+
+/**
+ * Tracks the Order by BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+ const track = async ({ headers, body }, res) => {
+  try {
+    const orderId = _.get(body, "message.order_id");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const trackingDetails = mobility.getTrackingDetails(orderId)
+    let message = {
+      tracking: trackingDetails
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    await util.respond(headers, context, message, "/on_track");
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
+/**
+ * Rate the Order in BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+ const rate = async ({ headers, body }, res) => {
+  try {
+    const orderId = _.get(body, "message.id");
+    const value = _.get(body, "value");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const feedback = await mobility.rateOrder(orderId, value)
+    let message = {
+      feedback
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    await util.respond(headers, context, message, "/on_rating");
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
+/**
+ * Get Support on the Order from BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+ const support = async ({ headers, body }, res) => {
+  try {
+    const orderId = _.get(body, "message.ref_id");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
+    }
+    const supportDetails = await mobility.getSupportDetails(orderId)
+    let message = {
+      ...supportDetails
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    await util.respond(headers, context, message, "/on_support");
+  } catch (error) {
+    res.status(500).send(util.httpResponse("NACK", error));
+  }
+}
+
 module.exports = {
   search,
   select,
   init,
+  confirm,
+  status,
+  cancel,
+  update,
+  rate,
+  support,
+  track
 };
