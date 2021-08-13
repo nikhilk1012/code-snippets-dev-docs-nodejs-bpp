@@ -1,7 +1,7 @@
 const _ = require("lodash");
-const axios = require("axios");
 const bpp = require("../services/bpp");
 const util = require("../config/util");
+const { head } = require("../routes/bpp");
 
 /**
  * Performs the search using message intent.
@@ -9,7 +9,7 @@ const util = require("../config/util");
  * @param {object} res Api response object.
  * @return {object} The search result executed by Mobilty Bpp.
  */
-const search = async ({ headers, body }, res) => {
+const searchMobilty = async ({ headers, body }, res) => {
   try {
     const intent = _.get(body, "message.intent");
     const context = _.get(body, "context");
@@ -31,30 +31,47 @@ const search = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Searching BPP Internal Resources
-    const mobilitySearchCatalog = await bpp.findMobiltyResourcesfromCatalog(startLoc, endLoc);
-    // ... Using Headers
-    const { bppId, bppURI } = await util.lookupBAP(headers);
-    // ... Constructing Request for BAP
-    const bapURI = _.get(context, "bap_uri");
-    const bapResponseData = {
-      context: {
-        ...context,
-        bpp_id: bppId,
-        bpp_uri: bppURI,
-      },
-      message: {
-        catalog: mobilitySearchCatalog,
-      },
+    const catalog = await bpp.findMobiltyResourcesfromCatalog(startLoc, endLoc);
+    let message = {
+      catalog,
     };
-    let callingURL = bapURI;
-    if (headers["Proxy-Authorization"]) {
-      callingURL = util.bgURL(headers);
+    await respondToBAP(headers, context, message);
+  } catch (error) {
+    res.status(500).send(util.httpResponse("ACK", error));
+  }
+};
+
+/**
+ * Performs the search using message intent.
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} The search result executed by Mobilty Bpp.
+ */
+const selectMobilty = ({ headers, body }, res) => {
+  try {
+    const order = _.get(body, "message.order");
+    const context = _.get(body, "context");
+    if (!context) {
+      return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    await axios({ URL: callingURL, method: "POST", data: bapResponseData });
+    const items = _.get(order, "items");
+    if (!items.length) {
+      return res
+        .status(400)
+        .send(util.httpResponse("NACK", `No Items Present`));
+    }
+    // ... Returns the ack immediately and continue the processing after validation
+    res.status(200).send(util.httpResponse("ACK"));
+    const order = bpp.returnQuoteOnSelectedItems(items);
+    let message = {
+      order,
+    };
+    await respondToBAP(headers, context, message);
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }
 };
 module.exports = {
-  search,
+  searchMobilty,
+  selectMobilty,
 };

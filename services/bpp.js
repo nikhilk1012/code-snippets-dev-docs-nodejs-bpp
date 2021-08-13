@@ -4,6 +4,11 @@ const findMobiltyResourcesfromGeoLoc = (startLoc, endLoc) => {
   return test.mobilitySearchResponse;
 }
 
+const returnQuoteOnSelectedItems = (items) => {
+  return test.mobilitySelectResponse;
+}
+
 module.exports = {
-  findMobiltyResourcesfromGeoLoc
+  findMobiltyResourcesfromGeoLoc,
+  returnQuoteOnSelectedItems
 }

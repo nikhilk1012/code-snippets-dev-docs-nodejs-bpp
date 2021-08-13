@@ -1,3 +1,5 @@
+const axios = require("axios");
+
 const httpResponse = (status, error) => {
   let res = {
     message: {
@@ -24,10 +26,31 @@ const lookupBAP = (headers) => {
 };
 
 const bgURL = () => {
-  return "https://mock.bg.com/beckn/"
-}
+  return "https://mock.bg.com/beckn/";
+};
+
+const respondToBAP = (context, headers, message) => {
+  // ... Using Headers
+  const { bppId, bppURI } = await lookupBAP(headers);
+  // ... Constructing Request for BAP
+  const bapURI = _.get(context, "bap_uri");
+  const response = {
+    context: {
+      ...context,
+      bpp_id: bppId,
+      bpp_uri: bppURI,
+    },
+    message,
+  };
+  let callingURL = bapURI;
+  if (headers["Proxy-Authorization"]) {
+    callingURL = bgURL(headers);
+  }
+  await axios({ URL: callingURL, method: "POST", data: response });
+};
 module.exports = {
   bgURL,
   httpResponse,
   lookupBAP,
+  respondToBAP
 };

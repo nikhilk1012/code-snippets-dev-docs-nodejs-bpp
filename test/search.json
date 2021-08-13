@@ -153,5 +153,62 @@
         ]
       }
     }
+  },
+  "mobilitySelectResponse": {
+    "order": {
+      "provider": {
+        "id": "yellow-cabs",
+        "locations": [
+          {
+            "id": "closest-sedan-spot",
+            "gps": "12.9349377,77.6055586"
+          }
+        ]
+      },
+      "items": [
+        {
+          "id": "sedan_spot",
+          "price": {
+            "currency": "INR",
+            "value": "170"
+          },
+          "time": {
+            "label": "ETA",
+            "duration": "P13M"
+          },
+          "location_id": "closest-sedan-spot",
+          "quantity": {
+            "selected": {
+              "count": 1
+            },
+            "available": {
+              "count": 4
+            }
+          }
+        }
+      ],
+      "quote": {
+        "price": {
+          "currency": "INR",
+          "value": "180"
+        },
+        "breakup": [
+          {
+            "title": "Sedan Spot Booking",
+            "price": {
+              "currency": "INR",
+              "value": "170"
+            }
+          },
+          {
+            "title": "Service Charge",
+            "price": {
+              "currency": "INR",
+              "value": "10"
+            }
+          }
+        ]
+      }
+    }
   }
 }
