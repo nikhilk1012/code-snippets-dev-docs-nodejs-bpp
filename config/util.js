@@ -1,4 +1,5 @@
 const axios = require("axios");
+const _ = require("lodash");
 
 const httpResponse = (status, error) => {
   let res = {
@@ -36,14 +37,14 @@ const addSignature = (headers) => {
   // TO-DO Add Signature
 }
 
-const respond = (headers, context, message, pathURI) => {
-  const { uri } = await lookup(headers);
+const respond = async (headers, context, message, pathURI) => {
+  const { uri } = await lookup(headers, context);
   const response = {
     context,
     message,
   };
   addSignature(headers);
-  return axios({ URL: `${uri}/${pathURI}`, method: "POST", data: response });
+  return axios({ url: `${uri}${pathURI}`, method: "POST", data: response });
 };
 
 module.exports = {

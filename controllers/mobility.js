@@ -16,7 +16,7 @@ const search = async ({ headers, body }, res) => {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
     const startLoc = _.get(intent, "fulfillment.start.location.gps");
-    const endLoc = _.get(intent, "fulfillment.start.location.gps");
+    const endLoc = _.get(intent, "fulfillment.end.location.gps");
     if (!startLoc || !endLoc) {
       return res
         .status(400)
@@ -46,7 +46,7 @@ const search = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the quotes provided by mobility
  */
-const select = ({ headers, body }, res) => {
+const select = async ({ headers, body }, res) => {
   try {
     const order = _.get(body, "message.order");
     const context = _.get(body, "context");
