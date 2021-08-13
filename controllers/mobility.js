@@ -41,10 +41,10 @@ const search = async ({ headers, body }, res) => {
 };
 
 /**
- * Performs the search using message intent.
+ * Returns Quote using request message.
  * @param {object} req Api request object.
  * @param {object} res Api response object.
- * @return {object} The search result executed by Mobilty Bpp.
+ * @return {object} returns the quotes provided by mobility
  */
 const select = ({ headers, body }, res) => {
   try {
@@ -70,6 +70,7 @@ const select = ({ headers, body }, res) => {
     res.status(500).send(util.httpResponse("ACK", error));
   }
 };
+
 module.exports = {
   search,
   select,
