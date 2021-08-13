@@ -34,7 +34,8 @@ const search = async ({ headers, body }, res) => {
     let message = {
       catalog,
     };
-    await util.respondToBAP(headers, context, message);
+    let pathURI = '/on_search';
+    await util.respondToBAP(headers, context, message, pathURI);
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }
@@ -65,7 +66,8 @@ const select = ({ headers, body }, res) => {
     let message = {
       order,
     };
-    await util.respondToBAP(headers, context, message);
+    let pathURI = '/on_select';
+    await util.respondToBAP(headers, context, message, pathURI);
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }

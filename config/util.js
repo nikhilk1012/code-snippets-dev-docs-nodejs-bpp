@@ -29,7 +29,7 @@ const bgURL = () => {
   return "https://mock.bg.com/beckn/";
 };
 
-const respondToBAP = (context, headers, message) => {
+const respondToBAP = (context, headers, message, pathURI) => {
   // ... Using Headers
   const { bppId, bppURI } = await lookupBAP(headers);
   // ... Constructing Request for BAP
@@ -46,7 +46,7 @@ const respondToBAP = (context, headers, message) => {
   if (headers["Proxy-Authorization"]) {
     callingURL = bgURL(headers);
   }
-  await axios({ URL: callingURL, method: "POST", data: response });
+  await axios({ URL: `${callingURL}/${pathURI}`, method: "POST", data: response });
 };
 module.exports = {
   bgURL,
