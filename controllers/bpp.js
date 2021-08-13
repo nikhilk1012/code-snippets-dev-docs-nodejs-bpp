@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const bpp = require("../services/bpp");
 const util = require("../config/util");
-const { head } = require("../routes/bpp");
 
 /**
  * Performs the search using message intent.
@@ -35,7 +34,7 @@ const searchMobilty = async ({ headers, body }, res) => {
     let message = {
       catalog,
     };
-    await respondToBAP(headers, context, message);
+    await util.respondToBAP(headers, context, message);
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }
@@ -66,7 +65,7 @@ const selectMobilty = ({ headers, body }, res) => {
     let message = {
       order,
     };
-    await respondToBAP(headers, context, message);
+    await util.respondToBAP(headers, context, message);
   } catch (error) {
     res.status(500).send(util.httpResponse("ACK", error));
   }
