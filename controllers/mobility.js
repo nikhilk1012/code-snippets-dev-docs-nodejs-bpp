@@ -36,7 +36,7 @@ const search = async ({ headers, body }, res) => {
     };
     await util.respond(headers, context, message, "/on_search");
   } catch (error) {
-    res.status(500).send(util.httpResponse("ACK", error));
+    res.status(500).send(util.httpResponse("NACK", error));
   }
 };
 
@@ -65,9 +65,9 @@ const select = ({ headers, body }, res) => {
     const { quote, provider, items } =
       mobility.returnQuoteOnSelectedItems(itemIds);
     message.order = { provider, items, quote };
-    await util.respondToBAP(headers, context, message, "/on_select");
+    await util.respond(headers, context, message, "/on_select");
   } catch (error) {
-    res.status(500).send(util.httpResponse("ACK", error));
+    res.status(500).send(util.httpResponse("NACK", error));
   }
 };
 
