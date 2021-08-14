@@ -86,7 +86,7 @@ const init = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    // ... Confirm the transactionId is associated with the Order
+    // ... Confirm required details are added to the order
     const isvalidated = mobility.validateOrderOnDetails(order);
     if (isvalidated) {
       order.quote = mobility.getQuote(order);
