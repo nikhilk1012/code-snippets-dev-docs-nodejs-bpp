@@ -248,19 +248,22 @@ const getPaymentDetails = () => {
     },
   };
 };
-const validateOrder = (order, paymentTransactionId) => {
+const validateOrderOnDetails = (order) => {
   if (
     (_.keys(order).includes("fulfillment") &&
       _.keys(order).includes("items") &&
-      _.keys(order).includes("billing")) ||
-    paymentTransactionId
+      _.keys(order).includes("billing"))
   ) {
     return true;
   }
   return false;
 };
 
-const getOrder = (transactionId, order) => {
+const validateOrderOnPayment = (order, paymentTransactionId) => {
+  return true;
+}
+
+const getOrder = (order) => {
   return {
     order: {
       items: [
@@ -351,7 +354,7 @@ const getOrder = (transactionId, order) => {
   };
 };
 
-const getOrderById = (transactionId, orderId) => {
+const getOrderById = (orderId) => {
   return {
     order: {
       items: [
@@ -560,7 +563,8 @@ module.exports = {
   getPaymentDetails,
   getQuote,
   saveOrder,
-  validateOrder,
+  validateOrderOnPayment,
+  validateOrderOnDetails,
   getOrder,
   getOrderById,
   cancelOrder,

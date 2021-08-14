@@ -84,16 +84,15 @@ const init = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const transactionId = _.get(context, "transactionId");
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Confirm the transactionId is associated with the Order
-    await mobility.saveOrder(transactionId, order);
-    const isvalidated = mobility.validateOrder(order);
+    const isvalidated = mobility.validateOrderOnDetails(order);
     if (isvalidated) {
       order.quote = mobility.getQuote(order);
       order.payments = mobility.getPaymentDetails(order.quote);
     }
+    await mobility.saveOrder(order);
     const message = {
       order
     }
@@ -117,11 +116,9 @@ const init = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const transactionId = _.get(context, "transactionId");
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    await mobility.getOrder(transactionId, order);
-    const isvalidated = mobility.validateOrder(order, paymentTransactionId);
+    const isvalidated = mobility.validateOrderOnPayment(order, paymentTransactionId);
     if (isvalidated) {
       const message = {
         order
@@ -148,10 +145,9 @@ const status = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const transactionId = _.get(context, "transactionId");
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const order = await mobility.getOrderById(transactionId, orderId);
+    const order = await mobility.getOrderById(orderId);
     const message = {
       order
     }
@@ -204,8 +200,7 @@ const status = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const transactionId = _.get(context, "transactionId");
-    const updatedOrder = await mobility.saveOrder(transactionId, order)
+    const updatedOrder = await mobility.saveOrder(order)
     let message = {
       order: updatedOrder
     }
