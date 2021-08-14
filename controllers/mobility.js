@@ -270,7 +270,7 @@ const status = async ({ headers, body }, res) => {
 }
 
 /**
- * Get Support on the Order from BPP
+ * Gets Support on the Order from BPP
  * @param {object} req Api request object.
  * @param {object} res Api response object.
  * @return {object} returns the order Status
@@ -294,6 +294,20 @@ const status = async ({ headers, body }, res) => {
   }
 }
 
+
+/**
+ * Gets All Cancellation Reason By BPP
+ * @param {object} req Api request object.
+ * @param {object} res Api response object.
+ * @return {object} returns the order Status
+ */
+const getCancellationReasons = async ({ headers, body }, res) => {
+  return [{
+    id: 1,
+    reason: "Delayed Ride"
+  }]
+}
+
 module.exports = {
   search,
   select,
@@ -304,5 +318,6 @@ module.exports = {
   update,
   rate,
   support,
-  track
+  track,
+  getCancellationReasons
 };

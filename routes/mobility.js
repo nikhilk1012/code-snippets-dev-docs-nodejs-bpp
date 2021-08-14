@@ -12,5 +12,5 @@ router.post('/cancel', mobility.cancel);
 router.post('/update', mobility.update);
 router.post('/rate', mobility.rate);
 router.post('/support', mobility.support);
-
+router.post('/get_cancellation_reasons', mobility.getCancellationReasons);
 module.exports = router;
