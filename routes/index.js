@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
-const bpp = require("./bpp");
+const mobility = require("./mobility");
+const delivery = require("./delivery");
+const localRetail = require("./localRetail");
 const auth = (req, res, next) => {
     // Authentication Verification
     // do the lookup and pass the header
@@ -9,6 +11,8 @@ const auth = (req, res, next) => {
 
 }
 // Middleware to add Auth
-router.use("/", auth, bpp); // Beckn Provider Platform
+router.use("/mobility", auth, mobility);
+router.use("/delivery", auth, delivery);
+router.use("/localRetail", auth, localRetail);
 
 module.exports = router;

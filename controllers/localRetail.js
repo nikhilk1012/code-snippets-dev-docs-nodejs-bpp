@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const bpp = require("../services/bpp");
+const localRetailService = require("../services/localRetail");
 const util = require("../config/util");
 
 /**
@@ -15,9 +15,8 @@ const search = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const startLoc = _.get(intent, "fulfillment.start.location.gps");
     const endLoc = _.get(intent, "fulfillment.end.location.gps");
-    if (!startLoc || !endLoc) {
+    if (!endLoc) {
       return res
         .status(400)
         .send(util.httpResponse("NACK", `Invalid Locations`));
@@ -25,16 +24,16 @@ const search = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Searching BPP Internal Resources
-    const providers = await bpp.findMobiltyProviders(startLoc, endLoc);
+    const providers = await localRetailService.findRetailProviders(endLoc);
     // ... Getting BPP Description
-    const description = await bpp.findMobilityDescription();
+    const description = await localRetailService.findRetailDesc();
     let message = {
       catalog: {
         "bpp/providers": providers,
         "bpp/descriptor": description,
       },
     };
-    await util.respond(headers, context, message, "/on_search");
+    await util.respond(headers, context, message, "/localRetail/on_search");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -44,7 +43,7 @@ const search = async ({ headers, body }, res) => {
  * Returns Quote using request message.
  * @param {object} req Api request object.
  * @param {object} res Api response object.
- * @return {object} returns the quotes provided by bpp
+ * @return {object} returns the quotes provided by localRetailService
  */
 const select = async ({ headers, body }, res) => {
   try {
@@ -62,9 +61,9 @@ const select = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     let message = { order: {} };
-    const { quote, provider, items } = bpp.returnQuoteOnSelectedItems(itemIds);
+    const { quote, provider, items } = localRetailService.returnQuoteOnSelectedItems(itemIds);
     message.order = { provider, items, quote };
-    await util.respond(headers, context, message, "/on_select");
+    await util.respond(headers, context, message, "/localRetail/on_select");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -86,16 +85,16 @@ const init = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Confirm required details are added to the order
-    const isvalidated = bpp.validateOrderOnDetails(order);
+    const isvalidated = localRetailService.validateOrderOnDetails(order);
     if (isvalidated) {
-      order.quote = bpp.getQuote(order);
-      order.payments = bpp.getPaymentDetails(order.quote);
+      order.quote = localRetailService.getQuote(order);
+      order.payments = localRetailService.getPaymentDetails(order.quote);
     }
-    await bpp.saveOrder(order);
+    await localRetailService.saveOrder(order);
     const message = {
       order,
     };
-    await util.respond(headers, context, message, "/on_init");
+    await util.respond(headers, context, message, "/localRetail/on_init");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -117,12 +116,12 @@ const confirm = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const isvalidated = bpp.validateOrderOnPayment(order, paymentTransactionId);
+    const isvalidated = localRetailService.validateOrderOnPayment(order, paymentTransactionId);
     if (isvalidated) {
       const message = {
         order,
       };
-      await util.respond(headers, context, message, "/on_confirm");
+      await util.respond(headers, context, message, "/localRetail/on_confirm");
     } else {
       res.status(500).send(util.httpResponse("NACK", "Invalid Order"));
     }
@@ -146,12 +145,12 @@ const status = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const order = await bpp.getOrderById(orderId);
+    const order = await localRetailService.getOrderById(orderId);
     const message = {
       order,
     };
     if (message.order) {
-      await util.respond(headers, context, message, "/on_confirm");
+      await util.respond(headers, context, message, "/localRetail/on_confirm");
     } else {
       res.status(500).send(util.httpResponse("NACK", "Invalid Order"));
     }
@@ -175,11 +174,11 @@ const cancel = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const cancelledOrder = await bpp.cancelOrder(orderId);
+    const cancelledOrder = await localRetailService.cancelOrder(orderId);
     let message = {
       order: cancelledOrder,
     };
-    await util.respond(headers, context, message, "/on_cancel");
+    await util.respond(headers, context, message, "/localRetail/on_cancel");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -200,11 +199,11 @@ const update = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const updatedOrder = await bpp.saveOrder(order);
+    const updatedOrder = await localRetailService.saveOrder(order);
     let message = {
       order: updatedOrder,
     };
-    await util.respond(headers, context, message, "/on_update");
+    await util.respond(headers, context, message, "/localRetail/on_update");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -225,11 +224,11 @@ const track = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const trackingDetails = bpp.getTrackingDetails(orderId);
+    const trackingDetails = localRetailService.getTrackingDetails(orderId);
     let message = {
       tracking: trackingDetails,
     };
-    await util.respond(headers, context, message, "/on_track");
+    await util.respond(headers, context, message, "/localRetail/on_track");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -251,11 +250,11 @@ const rate = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const feedback = await bpp.rateOrder(orderId, value);
+    const feedback = await localRetailService.rateOrder(orderId, value);
     let message = {
       feedback,
     };
-    await util.respond(headers, context, message, "/on_rating");
+    await util.respond(headers, context, message, "/localRetail/on_rating");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
@@ -276,11 +275,11 @@ const support = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const supportDetails = await bpp.getSupportDetails(orderId);
+    const supportDetails = await localRetailService.getSupportDetails(orderId);
     let message = {
       ...supportDetails,
     };
-    await util.respond(headers, context, message, "/on_support");
+    await util.respond(headers, context, message, "/localRetail/on_support");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }

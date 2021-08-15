@@ -27,10 +27,11 @@ const bgURL = () => {
 
 const lookup = (headers, context) => {
   let uri = _.get(context, "bap_uri")
+  let publicKey = ""
   if (headers["Proxy-Authorization"]) {
     uri = bgURL(headers);
   }
-  return { uri };
+  return { uri, publicKey };
 };
 
 const addSignature = (headers) => {
