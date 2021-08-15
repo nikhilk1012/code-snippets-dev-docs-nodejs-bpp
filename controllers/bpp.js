@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const mobility = require("../services/mobility");
+const bpp = require("../services/bpp");
 const util = require("../config/util");
 
 /**
@@ -25,9 +25,9 @@ const search = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Searching BPP Internal Resources
-    const providers = await mobility.findMobiltyProviders(startLoc, endLoc);
+    const providers = await bpp.findMobiltyProviders(startLoc, endLoc);
     // ... Getting BPP Description
-    const description = await mobility.findMobilityDescription();
+    const description = await bpp.findMobilityDescription();
     let message = {
       catalog: {
         "bpp/providers": providers,
@@ -44,7 +44,7 @@ const search = async ({ headers, body }, res) => {
  * Returns Quote using request message.
  * @param {object} req Api request object.
  * @param {object} res Api response object.
- * @return {object} returns the quotes provided by mobility
+ * @return {object} returns the quotes provided by bpp
  */
 const select = async ({ headers, body }, res) => {
   try {
@@ -62,8 +62,7 @@ const select = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     let message = { order: {} };
-    const { quote, provider, items } =
-      mobility.returnQuoteOnSelectedItems(itemIds);
+    const { quote, provider, items } = bpp.returnQuoteOnSelectedItems(itemIds);
     message.order = { provider, items, quote };
     await util.respond(headers, context, message, "/on_select");
   } catch (error) {
@@ -87,15 +86,15 @@ const init = async ({ headers, body }, res) => {
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
     // ... Confirm required details are added to the order
-    const isvalidated = mobility.validateOrderOnDetails(order);
+    const isvalidated = bpp.validateOrderOnDetails(order);
     if (isvalidated) {
-      order.quote = mobility.getQuote(order);
-      order.payments = mobility.getPaymentDetails(order.quote);
+      order.quote = bpp.getQuote(order);
+      order.payments = bpp.getPaymentDetails(order.quote);
     }
-    await mobility.saveOrder(order);
+    await bpp.saveOrder(order);
     const message = {
-      order
-    }
+      order,
+    };
     await util.respond(headers, context, message, "/on_init");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
@@ -108,7 +107,7 @@ const init = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order
  */
- const confirm = async ({ headers, body }, res) => {
+const confirm = async ({ headers, body }, res) => {
   try {
     const order = _.get(body, "message.order");
     const paymentTransactionId = _.get(body, "paymentTransactionId");
@@ -118,11 +117,11 @@ const init = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const isvalidated = mobility.validateOrderOnPayment(order, paymentTransactionId);
+    const isvalidated = bpp.validateOrderOnPayment(order, paymentTransactionId);
     if (isvalidated) {
       const message = {
-        order
-      }
+        order,
+      };
       await util.respond(headers, context, message, "/on_confirm");
     } else {
       res.status(500).send(util.httpResponse("NACK", "Invalid Order"));
@@ -147,10 +146,10 @@ const status = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const order = await mobility.getOrderById(orderId);
+    const order = await bpp.getOrderById(orderId);
     const message = {
-      order
-    }
+      order,
+    };
     if (message.order) {
       await util.respond(headers, context, message, "/on_confirm");
     } else {
@@ -159,8 +158,7 @@ const status = async ({ headers, body }, res) => {
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
-
+};
 
 /**
  * Cancels the Order Status by BPP
@@ -168,7 +166,7 @@ const status = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order Status
  */
- const cancel = async ({ headers, body }, res) => {
+const cancel = async ({ headers, body }, res) => {
   try {
     const orderId = _.get(body, "message.order_id");
     const context = _.get(body, "context");
@@ -177,15 +175,15 @@ const status = async ({ headers, body }, res) => {
     }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
-    const cancelledOrder = await mobility.cancelOrder(orderId);
+    const cancelledOrder = await bpp.cancelOrder(orderId);
     let message = {
-      order: cancelledOrder
-    }
+      order: cancelledOrder,
+    };
     await util.respond(headers, context, message, "/on_cancel");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
+};
 
 /**
  * Updates the Order by BPP
@@ -193,25 +191,24 @@ const status = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order Status
  */
- const update = async ({ headers, body }, res) => {
+const update = async ({ headers, body }, res) => {
   try {
     const order = _.get(body, "message.order");
     const context = _.get(body, "context");
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const updatedOrder = await mobility.saveOrder(order)
-    let message = {
-      order: updatedOrder
-    }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
+    const updatedOrder = await bpp.saveOrder(order);
+    let message = {
+      order: updatedOrder,
+    };
     await util.respond(headers, context, message, "/on_update");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
-
+};
 
 /**
  * Tracks the Order by BPP
@@ -219,24 +216,24 @@ const status = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order Status
  */
- const track = async ({ headers, body }, res) => {
+const track = async ({ headers, body }, res) => {
   try {
     const orderId = _.get(body, "message.order_id");
     const context = _.get(body, "context");
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const trackingDetails = mobility.getTrackingDetails(orderId)
-    let message = {
-      tracking: trackingDetails
-    }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
+    const trackingDetails = bpp.getTrackingDetails(orderId);
+    let message = {
+      tracking: trackingDetails,
+    };
     await util.respond(headers, context, message, "/on_track");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
+};
 
 /**
  * Rate the Order in BPP
@@ -244,7 +241,7 @@ const status = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order Status
  */
- const rate = async ({ headers, body }, res) => {
+const rate = async ({ headers, body }, res) => {
   try {
     const orderId = _.get(body, "message.id");
     const value = _.get(body, "value");
@@ -252,17 +249,17 @@ const status = async ({ headers, body }, res) => {
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const feedback = await mobility.rateOrder(orderId, value)
-    let message = {
-      feedback
-    }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
+    const feedback = await bpp.rateOrder(orderId, value);
+    let message = {
+      feedback,
+    };
     await util.respond(headers, context, message, "/on_rating");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
+};
 
 /**
  * Gets Support on the Order from BPP
@@ -270,25 +267,24 @@ const status = async ({ headers, body }, res) => {
  * @param {object} res Api response object.
  * @return {object} returns the order Status
  */
- const support = async ({ headers, body }, res) => {
+const support = async ({ headers, body }, res) => {
   try {
     const orderId = _.get(body, "message.ref_id");
     const context = _.get(body, "context");
     if (!context) {
       return res.status(400).send(util.httpResponse("NACK", "Missing Context"));
     }
-    const supportDetails = await mobility.getSupportDetails(orderId)
-    let message = {
-      ...supportDetails
-    }
     // ... Returns the ack immediately and continue the processing after validation
     res.status(200).send(util.httpResponse("ACK"));
+    const supportDetails = await bpp.getSupportDetails(orderId);
+    let message = {
+      ...supportDetails,
+    };
     await util.respond(headers, context, message, "/on_support");
   } catch (error) {
     res.status(500).send(util.httpResponse("NACK", error));
   }
-}
-
+};
 
 /**
  * Gets All Cancellation Reason By BPP
@@ -297,11 +293,13 @@ const status = async ({ headers, body }, res) => {
  * @return {object} returns the order Status
  */
 const getCancellationReasons = async ({ headers, body }, res) => {
-  return [{
-    id: 1,
-    reason: "Delayed Ride"
-  }]
-}
+  return [
+    {
+      id: 1,
+      reason: "Delayed Ride",
+    },
+  ];
+};
 
 module.exports = {
   search,
@@ -314,5 +312,5 @@ module.exports = {
   rate,
   support,
   track,
-  getCancellationReasons
+  getCancellationReasons,
 };

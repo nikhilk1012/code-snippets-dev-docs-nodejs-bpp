@@ -1,5 +1,5 @@
 {
-  "mobility": {
+  "bpp": {
     "providers": [
       {
         "id": "yellow-cabs",

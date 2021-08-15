@@ -1,4 +1,4 @@
-const test = require("../test/search.json");
+
 const _ = require("lodash");
 const findMobiltyProviders = (startLoc, endLoc) => {
   return {
