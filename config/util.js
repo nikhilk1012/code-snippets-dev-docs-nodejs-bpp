@@ -25,26 +25,18 @@ const bgURL = () => {
   return "https://mock.bg.com/beckn/";
 };
 
-const lookup = (headers, context) => {
-  let uri = _.get(context, "bap_uri")
-  let publicKey = ""
-  if (headers["Proxy-Authorization"]) {
-    uri = bgURL(headers);
-  }
-  return { uri, publicKey };
+const lookup = (headers) => {
+  return 'http://localhost:3000'
 };
 
-const addSignature = (headers) => {
-  // TO-DO Add Signature
-}
 
 const respond = async (headers, context, message, pathURI) => {
-  const { uri } = await lookup(headers, context);
+  const uri  = await lookup(headers);
   const response = {
     context,
     message,
   };
-  addSignature(headers);
+  console.log(`${uri}${pathURI}`);
   return axios({ url: `${uri}${pathURI}`, method: "POST", data: response });
 };
 
